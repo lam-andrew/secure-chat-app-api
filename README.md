@@ -1,5 +1,5 @@
 # secure-chat-app-api
-API for fullstack secure chat application
+API for fullstack secure chat application 
 
 # Flask Backend for Secure Chat Application
 This is the Flask backend for a secure chat application, responsible for handling user authentication, WebSocket connections for real-time messaging, and interaction with the database. It provides RESTful APIs that the React frontend consumes.
