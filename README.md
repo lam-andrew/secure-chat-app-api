@@ -46,7 +46,7 @@ Activate Virtual Environment and run:
 
 #### Running the Application
 To run the application on your local development machine:
-1. Set environment variables to tell Flask to run in development mode (enables features like debugger and auto-reloader)
+1. [IF NEEDED] Set environment variables to tell Flask to run in development mode (enables features like debugger and auto-reloader)
 ```
 export FLASK_APP=app.py
 export FLASK_ENV=development
@@ -64,10 +64,65 @@ export FLASK_ENV=development
 - requirements.txt: A list of project dependencies.
 
 
+---
+
 ## Deployment
+
 Instructions on how to deploy the application on a live system, such as Heroku:
 
-1. Heroku Setup: Ensure you have the Heroku CLI installed and are logged in.
-2. Create a Heroku App: `heroku create`
-3. Set Environment Variables on Heroku: Use `heroku config:set VAR_NAME=value` for each environment variable.
-4. Deploy: Push your code to Heroku using `git push heroku main`.
+### Heroku Setup
+
+1. **Install the Heroku CLI**: Ensure you have the Heroku Command Line Interface (CLI) installed on your system. You can download it from [Heroku's website](https://devcenter.heroku.com/articles/heroku-cli).
+
+2. **Login to Heroku**: Open your terminal and log in to Heroku using the command `heroku login`. This opens your web browser to log in to your Heroku account.
+
+### Create a Heroku App
+
+- Execute `heroku create` to create a new app on Heroku. This command outputs the web URL for your application and a Git URL. Note down the web URL, as you'll need it to access your deployed application.
+
+### Set Up Environment Variables
+
+- Set any necessary environment variables on Heroku using the command `heroku config:set VAR_NAME=value`. For each environment variable required by your application, repeat this command with the appropriate `VAR_NAME` and `value`. For example:
+
+```bash
+heroku config:set REACT_APP_API_URL=https://your-api-url.com
+```
+
+### Configure Buildpacks
+
+- Depending on your application's stack, you may need to specify one or more buildpacks. Heroku uses buildpacks to determine how to build and run your application.
+  - For a **Node.js** application, set the Node.js buildpack:
+```bash
+heroku buildpacks:set heroku/nodejs
+```
+  - For applications that require **multiple languages** (e.g., a React frontend and a Python Flask backend), add buildpacks in the order they should be executed:
+```bash
+heroku buildpacks:add --index 1 heroku/nodejs
+heroku buildpacks:add --index 2 heroku/python
+```
+
+### Deploy Your Application
+
+- **Deploy your application** by pushing your code to the Heroku remote. If your main branch is named `main`, use:
+```bash
+git push heroku main
+```
+
+Replace main with the name of your branch if using a different branch name.  
+- Monitor the deployment process by viewing the logs with:
+```bash
+heroku logs --tail
+```
+
+### Access Your Deployed Application
+- Once deployed, access your application through the web URL provided by Heroku. You can also open your app directly from the CLI with:
+```bash
+heroku open
+```
+
+### Additional Considerations
+- Database Setup: If your application uses a database, make sure to provision and configure the appropriate add-on in Heroku.
+
+- Custom Domain: Configure a custom domain via the Heroku dashboard or CLI if required.
+
+- Performance and Scaling: Monitor your application's performance. Scale dynos as needed to handle the load efficiently.
