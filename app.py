@@ -60,7 +60,7 @@ def http_call():
 def handle_message(data):
     """event listener when client types a message"""
     print("data from the front end: ",str(data))
-    emit("data",{'data':data,'id':request.sid},broadcast=True)
+    emit("data",{'data':data,'sid':request.sid},broadcast=True)
 
 # @socketio.on("disconnect")
 # def disconnected():
