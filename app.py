@@ -33,6 +33,7 @@ def list_messages():
         for msg in msgs:
             all_messages.append({
                 "sid": sid,
+                "googleId": msg["googleId"],
                 "username": msg["username"],
                 "profilePicUrl": msg["profilePicUrl"],
                 "text": msg["text"]
@@ -50,10 +51,11 @@ def handle_register(data):
 @socketio.on('data')
 def handle_message(data):
     """event listener when client types a message"""
+    print(f"OOG {data}")
     if request.sid not in messages:
         messages[request.sid] = []
     messages[request.sid].append(data)
-    emit("data",{'data': data["text"],'sid': request.sid, 'username': data["username"], 'profilePicUrl': data["profilePicUrl"]},broadcast=True)
+    emit("data",{'data': data["text"],'sid': request.sid, 'username': data["username"], 'googleId': data["googleId"], 'profilePicUrl': data["profilePicUrl"]},broadcast=True)
 
 @socketio.on("connect")
 def connected():
