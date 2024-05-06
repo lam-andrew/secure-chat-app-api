@@ -36,7 +36,8 @@ def list_messages():
                 "googleId": msg["googleId"],
                 "username": msg["username"],
                 "profilePicUrl": msg["profilePicUrl"],
-                "text": msg["text"]
+                "text": msg["text"],
+                "from": msg["from"]
             })
     return jsonify(all_messages)
 
@@ -55,7 +56,7 @@ def handle_message(data):
     if request.sid not in messages:
         messages[request.sid] = []
     messages[request.sid].append(data)
-    emit("data",{'data': data["text"],'sid': request.sid, 'username': data["username"], 'googleId': data["googleId"], 'profilePicUrl': data["profilePicUrl"]},broadcast=True)
+    emit("data",{'data': data["text"],'sid': request.sid, 'username': data["username"], 'googleId': data["googleId"], 'profilePicUrl': data["profilePicUrl"], 'from': data["from"]},broadcast=True)
 
 @socketio.on("connect")
 def connected():
