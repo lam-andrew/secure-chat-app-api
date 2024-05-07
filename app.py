@@ -47,12 +47,11 @@ def handle_register(data):
     """Receive and store user data upon connection."""
     users[request.sid] = data
     print(f"User registered: {data['username']}")
-    emit('userConnected', {'username': data['username'], 'profilePicUrl': data['profilePicUrl']}, broadcast=True)
+    emit('userConnected', {'username': data['username'], 'profilePicUrl': data['profilePicUrl'], 'googleId': data['googleId']}, broadcast=True)
 
 @socketio.on('data')
 def handle_message(data):
     """event listener when client types a message"""
-    print(f"OOG {data}")
     if request.sid not in messages:
         messages[request.sid] = []
     messages[request.sid].append(data)
