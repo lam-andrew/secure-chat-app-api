@@ -22,7 +22,7 @@ def serve():
 def list_users():
     """Endpoint to return a list of connected users."""
     # Create a list of user details from the users dictionary
-    user_list = [{"sid": sid, "username": user_data['username'], "profilePicUrl": user_data['profilePicUrl']} for sid, user_data in users.items()]
+    user_list = [{"sid": sid, "username": user_data['username'], "profilePicUrl": user_data['profilePicUrl'], "googleId": user_data['googleId']} for sid, user_data in users.items()]
     return jsonify(user_list)
 
 # Return list of messages to frontend
