@@ -73,8 +73,9 @@ def disconnected():
     """Event listener when client disconnects from the server."""
     user_info = users.pop(request.sid, {})  # Remove user info
     username = user_info.get('username', 'A user')
-    print(f"user {request.sid} ({username}) disconnected")
-    emit("userDisconnected", {'username': username}, broadcast=True)
+    googleId = user_info.get('googleId')
+    print(f"user {request.sid} ({username}, {googleId}) disconnected")
+    emit("userDisconnected", {'username': username, 'googleId': googleId}, broadcast=True)
 
     # If there are no more users connected, clear the messages
     if not users:  # Check if the users dictionary is empty
