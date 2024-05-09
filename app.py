@@ -17,6 +17,7 @@ messages = {}
 def serve():
     return send_from_directory(app.static_folder, 'index.html')
 
+# Return list of users to frontend
 @app.route('/users')
 def list_users():
     """Endpoint to return a list of connected users."""
@@ -24,6 +25,7 @@ def list_users():
     user_list = [{"sid": sid, "username": user_data['username'], "profilePicUrl": user_data['profilePicUrl']} for sid, user_data in users.items()]
     return jsonify(user_list)
 
+# Return list of messages to frontend
 @app.route('/messages')
 def list_messages():
     """Endpoint to return a list of all messages."""
@@ -37,7 +39,8 @@ def list_messages():
                 "username": msg["username"],
                 "profilePicUrl": msg["profilePicUrl"],
                 "text": msg["text"],
-                "from": msg["from"]
+                "from": msg["from"],
+                "timestamp": msg["timestamp"]
             })
     return jsonify(all_messages)
 
@@ -49,19 +52,22 @@ def handle_register(data):
     print(f"User registered: {data['username']}")
     emit('userConnected', {'username': data['username'], 'profilePicUrl': data['profilePicUrl'], 'googleId': data['googleId']}, broadcast=True)
 
+# Listen to client that send messages through the socket and broadcast message to all other clients
 @socketio.on('data')
 def handle_message(data):
     """event listener when client types a message"""
     if request.sid not in messages:
         messages[request.sid] = []
     messages[request.sid].append(data)
-    emit("data",{'data': data["text"],'sid': request.sid, 'username': data["username"], 'googleId': data["googleId"], 'profilePicUrl': data["profilePicUrl"], 'from': data["from"]},broadcast=True)
+    emit("data",{'data': data["text"],'sid': request.sid, 'username': data["username"], 'googleId': data["googleId"], 'profilePicUrl': data["profilePicUrl"], 'from': data["from"], 'timestamp': data["timestamp"]},broadcast=True)
 
+# Listen to clients that connect to the socket
 @socketio.on("connect")
 def connected():
     """Event listener when client connects to the server."""
     print(f"client {request.sid} has connected")
 
+# Listen to clients that disconnect from the socket
 @socketio.on("disconnect")
 def disconnected():
     """Event listener when client disconnects from the server."""
